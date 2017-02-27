@@ -10,8 +10,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,83 +24,59 @@ import java.util.logging.Logger;
  *
  * @author Diego Jacobs
  */
-public class GetEmail {
-    private ServerConnection serverConnection;
+public class GetEmail{
+    private Communicator _communicator;
     private String email;
-    private Calendar date;
+    private Timestamp date;
     private DateFormat dateFormat;
-    private String message;
-    private String response;
-    private DataOutputStream output;
-    private DataInputStream in;
     
     public GetEmail(String email){
+        _communicator = new Communicator();
         this.email = email;
-        this.date = Calendar.getInstance();
+        this.date = new Timestamp(System.currentTimeMillis());
         dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        this.message = new String();
-        serverConnection = new ServerConnection("127.0.0.1", 8000);
     }
     
-    public Boolean validate(){
-        Boolean isValid = false;
-        serverConnection.setClient();
+    public String Get(){
+        String isValid = "";
+        _communicator.initiateCommunication();
+        String response = _communicator.readUTF("");
         
-        OutputStream outToServer = serverConnection.getOutputStream();
-        output = new DataOutputStream(outToServer);
-        InputStream inFromServer = serverConnection.getInputStream();
-        in = new DataInputStream(inFromServer);
-        
-        message = "HELO";
-        System.out.println(message);
-        this.writeUTF(message);        
-        response = readUTF();
+        String message = "HELO";
+        System.out.println(message);      
+        response = _communicator.readUTF(message);
         System.out.println(response);
+        
         if(response.startsWith("200")){
             message = "USER: <" + this.email +">";
-            System.out.println(message);
-            this.writeUTF(message);        
-            response = readUTF();
+            System.out.println(message);    
+            response = _communicator.readUTF(message);
             System.out.println(response);
+            
             if(response.startsWith("200")){
-                message = "DATE: <" + this.dateFormat.format(this.date) +">";
-                System.out.println(message);
-                this.writeUTF(message);        
-                response = readUTF();
+                message = "DATE: <" + this.date.toString() +">";
+                System.out.println(message);    
+                response = _communicator.readUTF(message);
                 System.out.println(response);
+                
                 if(response.startsWith("200")){
                     message = "GET";
-                    System.out.println(message);
-                    this.writeUTF(message);        
-                    response = readUTF();
+                    System.out.println(message);     
+                    response = _communicator.readUTF(message);
                     System.out.println(response);
-                    isValid = response.startsWith("200");
+                    
+                    message = "QUIT";
+                    String temp = _communicator.readUTF(message);
+                    
+                    isValid = response;
                 }
             }
         }
-        message = "QUIT";
-        this.writeUTF(message);        
-        response = readUTF();
+        message = "QUIT";       
+        response = _communicator.readUTF(message);
         
-        serverConnection.closeClient();
+        _communicator.closeCommunication();
+        
         return isValid;
-    }
-    
-    private void writeUTF(String message){
-        try {
-            output.writeUTF(message);
-        } catch (IOException ex) {
-            Logger.getLogger(ValidateUser.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    private String readUTF(){
-        try {
-            return in.readUTF();
-        } catch (IOException ex) {
-            Logger.getLogger(ValidateUser.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return null;
     }
 }

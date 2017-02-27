@@ -19,65 +19,51 @@ import java.util.logging.Logger;
  *
  * @author Diego Jacobs
  */
-public class ValidateUser {
-    private ServerConnection serverConnection;
+public class ValidateUser{
+    Communicator _communicator;
     private String email;
     private String password;
-    private String message;
-    private String response;
-    private DataOutputStream output;
-    private DataInputStream in;
-    BufferedReader _in;
-    PrintWriter _out;
     
     public ValidateUser(String email, String password){
+        _communicator = new Communicator();
         this.email = email;
         this.password = password;
-        this.message = new String();
-        serverConnection = new ServerConnection("127.0.0.1", 8000);
     }
     
     public String validate(){
         String isValid = "500";
-        serverConnection.setClient();
+        _communicator.initiateCommunication();
         
-        _out = new java.io.PrintWriter(serverConnection.getOutputStream());
-        _in = new java.io.BufferedReader(new java.io.InputStreamReader(serverConnection.getInputStream()));
+        String message = "HELO";
+        System.out.println(message);      
         
-        message = "HELO";
-        System.out.println(message);
-        
-        //this.writeUTF(message); //Send Handshake        
-        
-        response = this.readUTF();
+        String response = _communicator.readUTF(message);
         System.out.println(response);
         
         if(response.startsWith("200")){
             message = "USER: <" + this.email +">";
-            System.out.println(message);
+            System.out.println(message);        
             
-            //this.writeUTF(message); //Send User        
-            
-            response = this.readUTF();
+            response = _communicator.readUTF(message);
             System.out.println(response);
             
             if(response.startsWith("200")){
                 message = "PASSWORD: <" + this.password +">"; 
                 System.out.println(message);
                 
-                //this.writeUTF(message); //Send Password
-                
-                response = readUTF();
+                response = _communicator.readUTF(message);
                 System.out.println(response);
+                
                 if(response.startsWith("200")){
                     message = "VALIDATE";
                     System.out.println(message);
                     
-                    //this.writeUTF(message); //Send Action      
-                    
-                    response = readUTF();
+                    response = _communicator.readUTF(message);
                     System.out.println(response);
                     
+                    message = "QUIT";
+                    String temp = _communicator.readUTF(message);
+        
                     return response;
                 }
             }
@@ -86,30 +72,11 @@ public class ValidateUser {
         isValid = "400 Missing Connection";
         
         message = "QUIT";
-        this.writeUTF(message);        
-        response = readUTF();
+        response = _communicator.readUTF(message);
         System.out.println(response);
         
-        serverConnection.closeClient();
+        _communicator.closeCommunication();
 
         return isValid;
-    }
-    
-    private void writeUTF(String message){
-        _out.println(message);
-        _out.flush();
-    }
-    
-    private String readUTF(){
-        try {
-            _out.println(message);
-            _out.flush();
-            String response = _in.readLine();
-            return response;
-        } catch (IOException ex) {
-            Logger.getLogger(ValidateUser.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return null;
     }
 }
