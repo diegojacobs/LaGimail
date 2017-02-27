@@ -86,8 +86,9 @@ public class ValidateUser {
         isValid = "400 Missing Connection";
         
         message = "QUIT";
-        //this.writeUTF(message);        
+        this.writeUTF(message);        
         response = readUTF();
+        System.out.println(response);
         
         serverConnection.closeClient();
 
