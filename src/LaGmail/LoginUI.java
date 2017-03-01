@@ -6,13 +6,15 @@
 package LaGmail;
 
 import Connections.ValidateUser;
+import java.awt.event.KeyEvent;
+import java.util.Arrays;
 
 /**
  *
  * @author Diego Jacobs
  */
 public class LoginUI extends javax.swing.JFrame {
-    private Inbox inboxFrame;
+    private InboxUI inboxUI;
     /**
      * Creates new form LoginUI
      */
@@ -22,7 +24,39 @@ public class LoginUI extends javax.swing.JFrame {
         this.emailError.setVisible(false);
         this.passwordError.setVisible(false);
     }
-
+    
+    private void ValidateLogin(){
+        this.connectionError.setVisible(false);
+        this.emailError.setVisible(false);
+        this.passwordError.setVisible(false);
+        
+        String email = jTextField1.getText();
+        String password = new String(jPasswordField1.getPassword());
+        ValidateUser vu = new ValidateUser(email, password);
+        String isValid = vu.validate();
+        
+        
+        if(isValid.startsWith("200")){
+            inboxUI = new InboxUI(email, true);
+            this.dispose();
+            inboxUI.setVisible(true);
+        }
+        
+        if(isValid.startsWith("404")){
+            emailError.setText("Invalid Email");
+            this.emailError.setVisible(true);
+        }
+        
+        if(isValid.startsWith("501")){
+            passwordError.setText("Invalid Password");
+            this.passwordError.setVisible(true);
+        }
+        
+        if(isValid.startsWith("500") || isValid.startsWith("400")){
+            this.connectionError.setVisible(true);
+            this.connectionError.setText("Check your Internet Connection.");
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,15 +67,17 @@ public class LoginUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         emailError = new javax.swing.JLabel();
         passwordError = new javax.swing.JLabel();
         connectionError = new javax.swing.JLabel();
+        jPasswordField1 = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTextField1.setText("djacobs@rapidin.com");
 
         jLabel1.setText("Email");
 
@@ -54,6 +90,11 @@ public class LoginUI extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+        jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton1KeyPressed(evt);
+            }
+        });
 
         emailError.setForeground(new java.awt.Color(255, 0, 0));
         emailError.setText("jLabel3");
@@ -63,6 +104,8 @@ public class LoginUI extends javax.swing.JFrame {
 
         connectionError.setForeground(new java.awt.Color(255, 0, 0));
         connectionError.setText("jLabel3");
+
+        jPasswordField1.setText("1234");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -84,7 +127,7 @@ public class LoginUI extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(emailError)
@@ -104,9 +147,9 @@ public class LoginUI extends javax.swing.JFrame {
                     .addComponent(emailError))
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(passwordError))
+                    .addComponent(passwordError)
+                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
@@ -120,34 +163,15 @@ public class LoginUI extends javax.swing.JFrame {
     //Login
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String email = jTextField1.getText();
-        String password = jTextField2.getText();
-        ValidateUser vu = new ValidateUser(email, password);
-        String isValid = vu.validate();
-        
-        
-        if(isValid.startsWith("200")){
-            inboxFrame = new Inbox(email);
-            this.dispose();
-            inboxFrame.setVisible(true);
-        }
-        
-        if(isValid.startsWith("404")){
-            emailError.setText("Invalid Email");
-            this.emailError.setVisible(true);
-        }
-        
-        if(isValid.startsWith("501")){
-            passwordError.setText("Invalid Password");
-            this.passwordError.setVisible(true);
-        }
-        
-        if(isValid.startsWith("500") || isValid.startsWith("400")){
-            this.connectionError.setVisible(true);
-            this.connectionError.setText("Check your Internet Connection.");
-        }
-        
+        ValidateLogin();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode()==KeyEvent.VK_ENTER){
+            ValidateLogin();
+        }
+    }//GEN-LAST:event_jButton1KeyPressed
 
     /**
      * @param args the command line arguments
@@ -190,8 +214,8 @@ public class LoginUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel passwordError;
     // End of variables declaration//GEN-END:variables
 }

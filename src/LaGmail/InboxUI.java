@@ -5,19 +5,28 @@
  */
 package LaGmail;
 
+import Connections.GetEmail;
+
 /**
  *
  * @author Diego Jacobs
  */
-public class Inbox extends javax.swing.JFrame {
+public class InboxUI extends javax.swing.JFrame {
+    private LoginUI loginUI;
+    private NewEmailUI newEmailUI;
     private String user;
+    private GetEmail _getEmail;
     
     /**
      * Creates new form Inbox
      */
-    public Inbox(String user) {
+    public InboxUI(String user, Boolean getEmail) {
         initComponents();
         this.user = user;
+        if(getEmail){
+            _getEmail = new GetEmail(user);
+            String emails = _getEmail.Get();
+        }
     }
 
     /**
@@ -38,6 +47,11 @@ public class Inbox extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         composeButton.setText("Compose");
+        composeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                composeButtonActionPerformed(evt);
+            }
+        });
 
         logOutButton.setText("Log Out");
         logOutButton.addActionListener(new java.awt.event.ActionListener() {
@@ -91,7 +105,17 @@ public class Inbox extends javax.swing.JFrame {
 
     private void logOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutButtonActionPerformed
         // TODO add your handling code here:
+        this.dispose();
+        loginUI = new LoginUI();
+        loginUI.setVisible(true);
     }//GEN-LAST:event_logOutButtonActionPerformed
+
+    private void composeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_composeButtonActionPerformed
+        // TODO add your handling code here:
+        newEmailUI = new NewEmailUI(this.user);
+        this.dispose();
+        newEmailUI.setVisible(true);
+    }//GEN-LAST:event_composeButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton composeButton;
