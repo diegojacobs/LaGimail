@@ -25,46 +25,51 @@ public class ValidateUser{
     private String password;
     
     public ValidateUser(String email, String password){
-        _communicator = new Communicator();
+        _communicator = new Communicator("WEB");
         this.email = email;
         this.password = password;
     }
     
     public String validate(){
         String isValid = "500";
-       // _communicator.initiateCommunication();
+        _communicator.initiateCommunication();
         
         String message = "HELO";
         System.out.println(message);      
         
-        String response = _communicator.readUTF(message);
+        _communicator.sendMessage(message);
+        String response = _communicator.readResponse();
         System.out.println(response);
         
         if(response.startsWith("200")){
             message = "USER: <" + this.email +">";
             System.out.println(message);        
             
-            response = _communicator.readUTF(message);
+            _communicator.sendMessage(message);
+            response = _communicator.readResponse();
             System.out.println(response);
             
             if(response.startsWith("200")){
                 message = "PASSWORD: <" + this.password +">"; 
                 System.out.println(message);
                 
-                response = _communicator.readUTF(message);
+                _communicator.sendMessage(message);
+                response = _communicator.readResponse();
                 System.out.println(response);
                 
                 if(response.startsWith("200")){
                     message = "VALIDATE";
                     System.out.println(message);
                     
-                    response = _communicator.readUTF(message);
+                    _communicator.sendMessage(message);
+                    response = _communicator.readResponse();
                     System.out.println(response);
                     
                     message = "QUIT";
                     System.out.println(message);
                     
-                    String temp = _communicator.readUTF(message);
+                    _communicator.sendMessage(message);
+                    String temp = _communicator.readResponse();
         
                     return response;
                 }
@@ -74,10 +79,9 @@ public class ValidateUser{
         isValid = "400 Missing Connection";
         
         message = "QUIT";
-        response = _communicator.readUTF(message);
+        _communicator.sendMessage(message);
+        response = _communicator.readResponse();
         System.out.println(response);
-        
-        //_communicator.closeCommunication();
 
         return isValid;
     }

@@ -25,8 +25,12 @@ public class Communicator {
     BufferedReader _in;
     PrintWriter _out;
 
-    public Communicator() {
-        serverConnection = new ServerConnection("127.0.0.1", 8000);
+    public Communicator(String type) {
+        if(type.equals("SMTP"))
+            serverConnection = new ServerConnection("127.0.0.1", 2407);
+        
+        if(type.equals("WEB"))
+            serverConnection = new ServerConnection("127.0.0.1", 8000);
     }
     
     public void initiateCommunication(){
@@ -39,10 +43,17 @@ public class Communicator {
         serverConnection.closeClient();
     }
     
-    public String readUTF(String message){
+    public void sendMessage(String message){
         try {
             out.write(message.getBytes());
             out.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(ValidateUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public String readResponse(){
+        try {
             byte[] request_bytes = new byte[size];
             in.read(request_bytes);
             String response = new String(request_bytes);

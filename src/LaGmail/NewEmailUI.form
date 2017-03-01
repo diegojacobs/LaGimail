@@ -27,17 +27,17 @@
           <Component id="toTextField" alignment="0" max="32767" attributes="0"/>
           <Component id="ccTextField" alignment="0" max="32767" attributes="0"/>
           <Component id="bccTextField" alignment="0" max="32767" attributes="0"/>
-          <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-              <Component id="discard" min="-2" max="-2" attributes="0"/>
+              <Component id="discardButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="send" min="-2" max="-2" attributes="0"/>
+              <Component id="sendButton" min="-2" max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
-              <Component id="subject" min="-2" pref="459" max="-2" attributes="0"/>
+              <Component id="subjectTextField" min="-2" pref="459" max="-2" attributes="0"/>
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
+          <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -51,13 +51,13 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="bccTextField" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="subject" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="subjectTextField" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
               <Component id="jScrollPane1" pref="177" max="32767" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="send" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="discard" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="sendButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="discardButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -91,7 +91,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTextArea" name="content">
+        <Component class="javax.swing.JTextArea" name="contentTextArea">
           <Properties>
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="5"/>
@@ -99,15 +99,18 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="send">
+    <Component class="javax.swing.JButton" name="sendButton">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="66" green="cc" red="0" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Send"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sendButtonActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="discard">
+    <Component class="javax.swing.JButton" name="discardButton">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="33" green="0" red="cc" type="rgb"/>
@@ -115,10 +118,10 @@
         <Property name="text" type="java.lang.String" value="Discard"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="discardActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="discardButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="subject">
+    <Component class="javax.swing.JTextField" name="subjectTextField">
       <Properties>
         <Property name="toolTipText" type="java.lang.String" value="Subject"/>
       </Properties>

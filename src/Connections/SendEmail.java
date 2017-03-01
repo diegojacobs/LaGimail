@@ -10,6 +10,7 @@ import com.google.gson.JsonSyntaxException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,69 +18,78 @@ import java.text.SimpleDateFormat;
  */
 public class SendEmail {
     private Communicator _communicator;
-    private String email;
+    private String from;
     private Timestamp date;
     private DateFormat dateFormat;
     private Gson gson;
     
-    public SendEmail(String email){
-        _communicator = new Communicator();
-        this.email = email;
+    public SendEmail(String from){
+        _communicator = new Communicator("SMTP");
+        this.from = from;
         this.date = new Timestamp(System.currentTimeMillis());
         dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         gson = new Gson();
     }
     
-    public String Get(){
+    public String Send(ArrayList<String> listTo, String data){
         String isValid = "";
+        
         _communicator.initiateCommunication();
         
-        try{
-            String message = "HELO";
-            System.out.println(message);      
-            String response = _communicator.readUTF(message);
+        String response = _communicator.readResponse();
+        System.out.println(response);
+        
+        String message = "HELO " + "localhost";
+        _communicator.sendMessage(message);
+        System.out.println(message);
+        
+        response = _communicator.readResponse();
+        System.out.println(response);
+        
+        message = "MAIL FROM: <" + from +">";
+        _communicator.sendMessage(message);
+        System.out.println(message);
+        
+        response = _communicator.readResponse();
+        System.out.println(response);
+        
+        for(String to : listTo){
+            message = "RCPT TO: <" + to +">";
+            _communicator.sendMessage(message);
+            System.out.println(message);
+            
+            response = _communicator.readResponse();
             System.out.println(response);
-
-            if(response.startsWith("200")){
-                message = "MAIL FROM: <" + this.email +">";
-                System.out.println(message);    
-                response = _communicator.readUTF(message);
-                System.out.println(response);
-
-                if(response.startsWith("200")){
-                    message = "DATE: <" + this.date.toString() +">";
-                    System.out.println(message);    
-                    response = _communicator.readUTF(message);
-                    System.out.println(response);
-
-                    if(response.startsWith("200")){
-                        message = "GET";
-                        System.out.println(message);     
-                        response = _communicator.readUTF(message);
-                        System.out.println(response);
-
-                        if (response.startsWith("200")){
-                            String json = response.substring(4, response.indexOf("}")+1);
-                            //Email emails = gson.fromJson(json, Email.class);
-                            //System.out.println(emails.toString());
-                        }
-
-                        message = "QUIT";
-                        String temp = _communicator.readUTF(message);
-
-                        isValid = response;
-                    }
-                }
-            }
         }
-        catch(JsonSyntaxException e){
-            System.err.println(e.toString());
-            String message = "QUIT";       
-            String response = _communicator.readUTF(message);
-        }
+            
+        message = "DATA";
+        _communicator.sendMessage(message);
+        System.out.println(message);
         
-        _communicator.closeCommunication();
+        response = _communicator.readResponse();
+        System.out.println(response);
         
-        return isValid;
+        message = data;
+        _communicator.sendMessage(message);
+        System.out.println(message);
+        
+        response = _communicator.readResponse();
+        System.out.println(response);
+        
+        message = ".";
+        _communicator.sendMessage(message);
+        System.out.println(message);
+        
+        response = _communicator.readResponse();
+        System.out.println(response);
+        
+        message = "QUIT";
+        _communicator.sendMessage(message);
+        System.out.println(message);
+        
+        _communicator.readResponse();
+        System.out.println(response);
+        
+        return response;
     }
 }

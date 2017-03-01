@@ -25,7 +25,7 @@ public class GetEmail{
     private Gson gson;
     
     public GetEmail(String email){
-        _communicator = new Communicator();
+        _communicator = new Communicator("WEB");
         this.email = email;
         this.date = new Timestamp(System.currentTimeMillis());
         dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -34,42 +34,48 @@ public class GetEmail{
     
     public String Get(){
         String isValid = "";
-/*        _communicator.initiateCommunication();
+        _communicator.initiateCommunication();
         
         try{
             String message = "HELO";
-            System.out.println(message);      
-            String response = _communicator.readUTF(message);
+            System.out.println(message);  
+            
+            _communicator.sendMessage(message);
+            String response = _communicator.readResponse();
             System.out.println(response);
 
             if(response.startsWith("200")){
                 message = "USER: <" + this.email +">";
                 System.out.println(message);    
-                response = _communicator.readUTF(message);
+                _communicator.sendMessage(message);
+                response = _communicator.readResponse();
                 System.out.println(response);
 
                 if(response.startsWith("200")){
                     message = "DATE: <" + this.date.toString() +">";
                     System.out.println(message);    
-                    response = _communicator.readUTF(message);
+                    _communicator.sendMessage(message);
+                    response = _communicator.readResponse();
                     System.out.println(response);
 
                     if(response.startsWith("200")){
                         message = "GET";
                         System.out.println(message);     
-                        response = _communicator.readUTF(message);
+                        _communicator.sendMessage(message);
+                        response = _communicator.readResponse();
                         System.out.println(response);
 
                         if (response.startsWith("200")){
                             String json = response.substring(4, response.indexOf("}")+1);
-                            //Email emails = gson.fromJson(json, Email.class);
-                            //System.out.println(emails.toString());
+                            Email email = gson.fromJson(json, Email.class);
+                            System.out.println(email.toString());
                         }
 
                         message = "QUIT";                    
                         System.out.println(message);
                         
-                        String temp = _communicator.readUTF(message);
+                        _communicator.sendMessage(message);
+                        String temp = _communicator.readResponse();    
                         System.out.println(temp);
                     
                         isValid = response;
@@ -80,17 +86,17 @@ public class GetEmail{
         catch(JsonSyntaxException e){
             System.err.println(e.toString());
             String message = "QUIT";       
-            String response = _communicator.readUTF(message);
+            _communicator.sendMessage(message);
+            String response = _communicator.readResponse();
         }
 
         String message = "QUIT";                    
         System.out.println(message);
 
-        String temp = _communicator.readUTF(message);
+        _communicator.sendMessage(message);
+        String temp = _communicator.readResponse();
         System.out.println(temp);
-
-        _communicator.closeCommunication();
-*/        
+        
         return isValid;
     }
 }

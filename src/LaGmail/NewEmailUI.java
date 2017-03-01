@@ -5,9 +5,12 @@
  */
 package LaGmail;
 
+import Connections.SendEmail;
+import Models.Email;
 import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.ArrayList;
 import javax.swing.JTextField;
 
 /**
@@ -17,6 +20,7 @@ import javax.swing.JTextField;
 public class NewEmailUI extends javax.swing.JFrame {
     private InboxUI inboxUI;
     private String user;
+    private SendEmail sendEmail;
     
     /**
      * Creates new form NewEmail
@@ -24,27 +28,10 @@ public class NewEmailUI extends javax.swing.JFrame {
     public NewEmailUI(String user) {
         initComponents();
         this.user = user;
+        sendEmail = new SendEmail(user);
+        
         fromTextField.setText(user);
         fromTextField.setEnabled(false);
-        
-        subject = new JTextField("Subject");
-        subject.setForeground(Color.GRAY);
-        subject.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (subject.getText().equals("Subject")) {
-                    subject.setText("");
-                    subject.setForeground(Color.BLACK);
-                }
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (subject.getText().isEmpty()) {
-                    subject.setForeground(Color.GRAY);
-                    subject.setText("Subject");
-                }
-            }
-            });
     }
 
     /**
@@ -61,10 +48,10 @@ public class NewEmailUI extends javax.swing.JFrame {
         ccTextField = new javax.swing.JTextField();
         bccTextField = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        content = new javax.swing.JTextArea();
-        send = new javax.swing.JButton();
-        discard = new javax.swing.JButton();
-        subject = new javax.swing.JTextField();
+        contentTextArea = new javax.swing.JTextArea();
+        sendButton = new javax.swing.JButton();
+        discardButton = new javax.swing.JButton();
+        subjectTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -76,22 +63,27 @@ public class NewEmailUI extends javax.swing.JFrame {
 
         bccTextField.setToolTipText("Bcc");
 
-        content.setColumns(20);
-        content.setRows(5);
-        jScrollPane1.setViewportView(content);
+        contentTextArea.setColumns(20);
+        contentTextArea.setRows(5);
+        jScrollPane1.setViewportView(contentTextArea);
 
-        send.setBackground(new java.awt.Color(0, 204, 102));
-        send.setText("Send");
-
-        discard.setBackground(new java.awt.Color(204, 0, 51));
-        discard.setText("Discard");
-        discard.addActionListener(new java.awt.event.ActionListener() {
+        sendButton.setBackground(new java.awt.Color(0, 204, 102));
+        sendButton.setText("Send");
+        sendButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                discardActionPerformed(evt);
+                sendButtonActionPerformed(evt);
             }
         });
 
-        subject.setToolTipText("Subject");
+        discardButton.setBackground(new java.awt.Color(204, 0, 51));
+        discardButton.setText("Discard");
+        discardButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                discardButtonActionPerformed(evt);
+            }
+        });
+
+        subjectTextField.setToolTipText("Subject");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -101,15 +93,15 @@ public class NewEmailUI extends javax.swing.JFrame {
             .addComponent(toTextField)
             .addComponent(ccTextField)
             .addComponent(bccTextField)
-            .addComponent(jScrollPane1)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(discard)
+                .addComponent(discardButton)
                 .addGap(18, 18, 18)
-                .addComponent(send))
+                .addComponent(sendButton))
             .addGroup(layout.createSequentialGroup()
-                .addComponent(subject, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(subjectTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,35 +114,79 @@ public class NewEmailUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bccTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(subject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(subjectTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(send)
-                    .addComponent(discard)))
+                    .addComponent(sendButton)
+                    .addComponent(discardButton)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void discardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discardActionPerformed
+    private void discardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discardButtonActionPerformed
         // TODO add your handling code here:
-        inboxUI = new InboxUI(this.user);
+        inboxUI = new InboxUI(this.user, false);
         this.dispose();
         inboxUI.setVisible(true);
-    }//GEN-LAST:event_discardActionPerformed
+    }//GEN-LAST:event_discardButtonActionPerformed
+
+    private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
+        // TODO add your handling code here:
+        String from = user;
+        String labelTo = toTextField.getText(); 
+        String labelCc = ccTextField.getText(); 
+        String labelBcc = bccTextField.getText();
+        String subject = subjectTextField.getText();
+        String content = contentTextArea.getText();
+        
+        String data = new String();
+        data += "SUBJECT: <" + subject + ">\n";
+        data += "FROM: <" + from + ">\n";
+        
+        ArrayList<String> to = new ArrayList<String>();
+        
+        if(!labelTo.isEmpty()){
+            String[] emailsTo = labelTo.split(";");
+            for(String email : emailsTo){
+                to.add(email);
+                data += "TO: <" + email + ">\n";
+            }
+        }
+        
+        if(!labelCc.isEmpty()){
+            String[] emailsCc = labelCc.split(";");
+            for(String email : emailsCc){
+                to.add(email);
+                data += "CC: <" + email + ">\n";
+            }
+        }
+        
+        if(!labelBcc.isEmpty()){
+            String[] emailsBcc = labelBcc.split(";");
+            for(String email : emailsBcc){
+                to.add(email);
+                data += "BCC: <" + email + ">\n";
+            }
+        }
+        
+        data += content + "\n";
+        
+        sendEmail.Send(to, data);
+    }//GEN-LAST:event_sendButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField bccTextField;
     private javax.swing.JTextField ccTextField;
-    private javax.swing.JTextArea content;
-    private javax.swing.JButton discard;
+    private javax.swing.JTextArea contentTextArea;
+    private javax.swing.JButton discardButton;
     private javax.swing.JTextField fromTextField;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton send;
-    private javax.swing.JTextField subject;
+    private javax.swing.JButton sendButton;
+    private javax.swing.JTextField subjectTextField;
     private javax.swing.JTextField toTextField;
     // End of variables declaration//GEN-END:variables
 }

@@ -37,7 +37,7 @@ public class LoginUI extends javax.swing.JFrame {
         
         
         if(isValid.startsWith("200")){
-            inboxUI = new InboxUI(email);
+            inboxUI = new InboxUI(email, true);
             this.dispose();
             inboxUI.setVisible(true);
         }
