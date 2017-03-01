@@ -32,7 +32,7 @@ public class ValidateUser{
     
     public String validate(){
         String isValid = "500";
-        _communicator.initiateCommunication();
+       // _communicator.initiateCommunication();
         
         String message = "HELO";
         System.out.println(message);      
@@ -62,6 +62,8 @@ public class ValidateUser{
                     System.out.println(response);
                     
                     message = "QUIT";
+                    System.out.println(message);
+                    
                     String temp = _communicator.readUTF(message);
         
                     return response;
@@ -75,7 +77,7 @@ public class ValidateUser{
         response = _communicator.readUTF(message);
         System.out.println(response);
         
-        _communicator.closeCommunication();
+        //_communicator.closeCommunication();
 
         return isValid;
     }

@@ -19,8 +19,9 @@ import java.util.logging.Logger;
  */
 public class Communicator {
     private ServerConnection serverConnection;
-    private DataOutputStream output;
+    private DataOutputStream out;
     private DataInputStream in;
+    private int size = 256;
     BufferedReader _in;
     PrintWriter _out;
 
@@ -30,8 +31,8 @@ public class Communicator {
     
     public void initiateCommunication(){
         serverConnection.setClient();
-        _out = new java.io.PrintWriter(serverConnection.getOutputStream());
-        _in = new java.io.BufferedReader(new java.io.InputStreamReader(serverConnection.getInputStream()));
+        in = new DataInputStream(serverConnection.getInputStream());
+        out = new DataOutputStream((serverConnection.getOutputStream()));
     }
     
     public void closeCommunication(){
@@ -40,9 +41,11 @@ public class Communicator {
     
     public String readUTF(String message){
         try {
-            _out.println(message);
-            _out.flush();
-            String response = _in.readLine();
+            out.write(message.getBytes());
+            out.flush();
+            byte[] request_bytes = new byte[size];
+            in.read(request_bytes);
+            String response = new String(request_bytes);
             return response;
         } catch (IOException ex) {
             Logger.getLogger(ValidateUser.class.getName()).log(Level.SEVERE, null, ex);

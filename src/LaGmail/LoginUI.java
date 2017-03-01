@@ -77,6 +77,8 @@ public class LoginUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jTextField1.setText("djacobs@rapidin.com");
+
         jLabel1.setText("Email");
 
         jLabel2.setText("Password");
@@ -102,6 +104,8 @@ public class LoginUI extends javax.swing.JFrame {
 
         connectionError.setForeground(new java.awt.Color(255, 0, 0));
         connectionError.setText("jLabel3");
+
+        jPasswordField1.setText("1234");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

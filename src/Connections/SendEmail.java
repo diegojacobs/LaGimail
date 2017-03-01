@@ -5,26 +5,24 @@
  */
 package Connections;
 
-import Models.Email;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import java.util.ArrayList;
 
 /**
  *
  * @author Diego Jacobs
  */
-public class GetEmail{
+public class SendEmail {
     private Communicator _communicator;
     private String email;
     private Timestamp date;
     private DateFormat dateFormat;
     private Gson gson;
     
-    public GetEmail(String email){
+    public SendEmail(String email){
         _communicator = new Communicator();
         this.email = email;
         this.date = new Timestamp(System.currentTimeMillis());
@@ -34,7 +32,7 @@ public class GetEmail{
     
     public String Get(){
         String isValid = "";
-/*        _communicator.initiateCommunication();
+        _communicator.initiateCommunication();
         
         try{
             String message = "HELO";
@@ -43,7 +41,7 @@ public class GetEmail{
             System.out.println(response);
 
             if(response.startsWith("200")){
-                message = "USER: <" + this.email +">";
+                message = "MAIL FROM: <" + this.email +">";
                 System.out.println(message);    
                 response = _communicator.readUTF(message);
                 System.out.println(response);
@@ -66,12 +64,9 @@ public class GetEmail{
                             //System.out.println(emails.toString());
                         }
 
-                        message = "QUIT";                    
-                        System.out.println(message);
-                        
+                        message = "QUIT";
                         String temp = _communicator.readUTF(message);
-                        System.out.println(temp);
-                    
+
                         isValid = response;
                     }
                 }
@@ -82,15 +77,9 @@ public class GetEmail{
             String message = "QUIT";       
             String response = _communicator.readUTF(message);
         }
-
-        String message = "QUIT";                    
-        System.out.println(message);
-
-        String temp = _communicator.readUTF(message);
-        System.out.println(temp);
-
+        
         _communicator.closeCommunication();
-*/        
+        
         return isValid;
     }
 }

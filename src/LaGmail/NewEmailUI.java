@@ -5,17 +5,46 @@
  */
 package LaGmail;
 
+import java.awt.Color;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import javax.swing.JTextField;
+
 /**
  *
  * @author Diego Jacobs
  */
 public class NewEmailUI extends javax.swing.JFrame {
-
+    private InboxUI inboxUI;
+    private String user;
+    
     /**
      * Creates new form NewEmail
      */
-    public NewEmailUI() {
+    public NewEmailUI(String user) {
         initComponents();
+        this.user = user;
+        fromTextField.setText(user);
+        fromTextField.setEnabled(false);
+        
+        subject = new JTextField("Subject");
+        subject.setForeground(Color.GRAY);
+        subject.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (subject.getText().equals("Subject")) {
+                    subject.setText("");
+                    subject.setForeground(Color.BLACK);
+                }
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (subject.getText().isEmpty()) {
+                    subject.setForeground(Color.GRAY);
+                    subject.setText("Subject");
+                }
+            }
+            });
     }
 
     /**
@@ -27,23 +56,101 @@ public class NewEmailUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        fromTextField = new javax.swing.JTextField();
+        toTextField = new javax.swing.JTextField();
+        ccTextField = new javax.swing.JTextField();
+        bccTextField = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        content = new javax.swing.JTextArea();
+        send = new javax.swing.JButton();
+        discard = new javax.swing.JButton();
+        subject = new javax.swing.JTextField();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        fromTextField.setToolTipText("From");
+
+        toTextField.setToolTipText("To");
+
+        ccTextField.setToolTipText("Cc");
+
+        bccTextField.setToolTipText("Bcc");
+
+        content.setColumns(20);
+        content.setRows(5);
+        jScrollPane1.setViewportView(content);
+
+        send.setBackground(new java.awt.Color(0, 204, 102));
+        send.setText("Send");
+
+        discard.setBackground(new java.awt.Color(204, 0, 51));
+        discard.setText("Discard");
+        discard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                discardActionPerformed(evt);
+            }
+        });
+
+        subject.setToolTipText("Subject");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(fromTextField)
+            .addComponent(toTextField)
+            .addComponent(ccTextField)
+            .addComponent(bccTextField)
+            .addComponent(jScrollPane1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(discard)
+                .addGap(18, 18, 18)
+                .addComponent(send))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(subject, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(fromTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(toTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ccTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bccTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(subject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(send)
+                    .addComponent(discard)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void discardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discardActionPerformed
+        // TODO add your handling code here:
+        inboxUI = new InboxUI(this.user);
+        this.dispose();
+        inboxUI.setVisible(true);
+    }//GEN-LAST:event_discardActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField bccTextField;
+    private javax.swing.JTextField ccTextField;
+    private javax.swing.JTextArea content;
+    private javax.swing.JButton discard;
+    private javax.swing.JTextField fromTextField;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton send;
+    private javax.swing.JTextField subject;
+    private javax.swing.JTextField toTextField;
     // End of variables declaration//GEN-END:variables
 }

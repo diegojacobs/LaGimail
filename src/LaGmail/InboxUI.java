@@ -20,11 +20,13 @@ public class InboxUI extends javax.swing.JFrame {
     /**
      * Creates new form Inbox
      */
-    public InboxUI(String user) {
+    public InboxUI(String user, Boolean getEmail) {
         initComponents();
         this.user = user;
-        _getEmail = new GetEmail(user);
-        String emails = _getEmail.Get();
+        if(getEmail){
+            _getEmail = new GetEmail(user);
+            String emails = _getEmail.Get();
+        }
     }
 
     /**
@@ -110,7 +112,7 @@ public class InboxUI extends javax.swing.JFrame {
 
     private void composeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_composeButtonActionPerformed
         // TODO add your handling code here:
-        newEmailUI = new NewEmailUI();
+        newEmailUI = new NewEmailUI(this.user);
         this.dispose();
         newEmailUI.setVisible(true);
     }//GEN-LAST:event_composeButtonActionPerformed
