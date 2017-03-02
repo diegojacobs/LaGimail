@@ -27,7 +27,7 @@ public class Communicator {
 
     public Communicator(String type) {
         if(type.equals("SMTP"))
-            serverConnection = new ServerConnection("127.0.0.1", 2407);
+            serverConnection = new ServerConnection("127.0.0.1", 2508);
         
         if(type.equals("WEB"))
             serverConnection = new ServerConnection("127.0.0.1", 8000);

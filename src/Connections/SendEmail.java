@@ -16,24 +16,24 @@ import java.util.ArrayList;
  *
  * @author Diego Jacobs
  */
-public class SendEmail {
+public class SendEmail{
     private Communicator _communicator;
     private String from;
     private Timestamp date;
     private DateFormat dateFormat;
-    private Gson gson;
+    private ArrayList<String> listTo;
+    private String data;
     
-    public SendEmail(String from){
+    public SendEmail(String from, ArrayList<String> listTo, String data){
         _communicator = new Communicator("SMTP");
         this.from = from;
         this.date = new Timestamp(System.currentTimeMillis());
         dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        gson = new Gson();
+        this.data = data;
+        this.listTo = listTo;
     }
-    
-    public String Send(ArrayList<String> listTo, String data){
-        String isValid = "";
-        
+
+    public void Send() {
         _communicator.initiateCommunication();
         
         String response = _communicator.readResponse();
@@ -89,7 +89,5 @@ public class SendEmail {
         
         _communicator.readResponse();
         System.out.println(response);
-        
-        return response;
     }
 }

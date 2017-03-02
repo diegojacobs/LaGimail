@@ -43,44 +43,36 @@ public class GetEmail{
             String response = _communicator.readResponse();
             System.out.println(response);
 
-            if(response.startsWith("200")){
-                message = "USER: <" + this.email +">";
-                System.out.println(message);    
-                _communicator.sendMessage(message);
-                response = _communicator.readResponse();
-                System.out.println(response);
+            message = "USER: <" + this.email +">";
+            System.out.println(message);    
+            _communicator.sendMessage(message);
+            response = _communicator.readResponse();
+            System.out.println(response);
 
-                if(response.startsWith("200")){
-                    message = "DATE: <" + this.date.toString() +">";
-                    System.out.println(message);    
-                    _communicator.sendMessage(message);
-                    response = _communicator.readResponse();
-                    System.out.println(response);
+            message = "DATE: <" + this.date.toString() +">";
+            System.out.println(message);    
+            _communicator.sendMessage(message);
+            response = _communicator.readResponse();
+            System.out.println(response);
 
-                    if(response.startsWith("200")){
-                        message = "GET";
-                        System.out.println(message);     
-                        _communicator.sendMessage(message);
-                        response = _communicator.readResponse();
-                        System.out.println(response);
+            message = "GET";
+            System.out.println(message);     
+            _communicator.sendMessage(message);
+            response = _communicator.readResponse();
+            System.out.println(response);
 
-                        if (response.startsWith("200")){
-                            String json = response.substring(4, response.indexOf("]")+1);
-                            emails = gson.fromJson(json, Email[].class);
-                            System.out.println(emails.toString());
-                        }
+            String json = response.substring(4, response.indexOf("]")+1);
+            emails = gson.fromJson(json, Email[].class);
+            System.out.println(emails.toString());
 
-                        message = "QUIT";                    
-                        System.out.println(message);
-                        
-                        _communicator.sendMessage(message);
-                        String temp = _communicator.readResponse();    
-                        System.out.println(temp);
-                    
-                        return emails;
-                    }
-                }
-            }
+            message = "QUIT";                    
+            System.out.println(message);
+
+            _communicator.sendMessage(message);
+            String temp = _communicator.readResponse();    
+            System.out.println(temp);
+
+            return emails;
         }
         catch(JsonSyntaxException e){
             System.err.println(e.toString());

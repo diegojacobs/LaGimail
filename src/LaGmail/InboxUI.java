@@ -48,21 +48,20 @@ public class InboxUI extends javax.swing.JFrame {
         initComponents();
         this.user = user;
         if(getEmail){
-            _getEmail = new GetEmail(user);
-            this.Emails = _getEmail.Get();
-            
-            ListModel lm = new StaticListModel(this.Emails);
-            jList1.setModel(lm);
-        } 
-        
-        jList1.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent evt) {
-                
-                
-            }
-        });
+            GetEmail();
+            ListEmails();
+        }
     }
     
+    private void GetEmail(){
+        _getEmail = new GetEmail(user);
+        this.Emails = _getEmail.Get();
+    }
+    
+    private void ListEmails(){
+        ListModel lm = new StaticListModel(this.Emails);
+        jList1.setModel(lm);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -128,7 +127,7 @@ public class InboxUI extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextArea1);
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "No Emails" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -189,14 +188,14 @@ public class InboxUI extends javax.swing.JFrame {
     private void composeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_composeButtonActionPerformed
         // TODO add your handling code here:
         newEmailUI = new NewEmailUI(this.user);
-        this.dispose();
+        //this.dispose();
         newEmailUI.setVisible(true);
     }//GEN-LAST:event_composeButtonActionPerformed
 
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
         // TODO add your handling code here:
-        _getEmail = new GetEmail(user);
-        this.Emails = _getEmail.Get();
+        GetEmail();
+        ListEmails();
     }//GEN-LAST:event_refreshButtonActionPerformed
 
     private void logOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutButtonActionPerformed
