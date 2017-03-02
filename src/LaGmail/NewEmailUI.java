@@ -6,12 +6,7 @@
 package LaGmail;
 
 import Connections.SendEmail;
-import Models.Email;
-import java.awt.Color;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.ArrayList;
-import javax.swing.JTextField;
 
 /**
  *
@@ -24,11 +19,11 @@ public class NewEmailUI extends javax.swing.JFrame {
     
     /**
      * Creates new form NewEmail
+     * @param user
      */
     public NewEmailUI(String user) {
         initComponents();
         this.user = user;
-        sendEmail = new SendEmail(user);
         
         fromTextField.setText(user);
         fromTextField.setEnabled(false);
@@ -174,7 +169,11 @@ public class NewEmailUI extends javax.swing.JFrame {
         
         data += content + "\n";
         
-        sendEmail.Send(to, data);
+        sendEmail = new SendEmail(user, to, data);
+        sendEmail.Send();
+        //inboxUI = new InboxUI(user, false);
+        this.dispose();
+        //inboxUI.setVisible(true);
     }//GEN-LAST:event_sendButtonActionPerformed
 
 

@@ -21,13 +21,13 @@ public class Communicator {
     private ServerConnection serverConnection;
     private DataOutputStream out;
     private DataInputStream in;
-    private int size = 256;
+    private int size = 512;
     BufferedReader _in;
     PrintWriter _out;
 
     public Communicator(String type) {
         if(type.equals("SMTP"))
-            serverConnection = new ServerConnection("127.0.0.1", 2407);
+            serverConnection = new ServerConnection("127.0.0.1", 2508);
         
         if(type.equals("WEB"))
             serverConnection = new ServerConnection("127.0.0.1", 8000);

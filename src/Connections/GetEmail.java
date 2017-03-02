@@ -11,7 +11,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import java.util.ArrayList;
 
 /**
  *
@@ -32,8 +31,8 @@ public class GetEmail{
         gson = new Gson();
     }
     
-    public String Get(){
-        String isValid = "";
+    public Email[] Get(){
+        Email[] emails = null;
         _communicator.initiateCommunication();
         
         try{
@@ -44,44 +43,36 @@ public class GetEmail{
             String response = _communicator.readResponse();
             System.out.println(response);
 
-            if(response.startsWith("200")){
-                message = "USER: <" + this.email +">";
-                System.out.println(message);    
-                _communicator.sendMessage(message);
-                response = _communicator.readResponse();
-                System.out.println(response);
+            message = "USER: <" + this.email +">";
+            System.out.println(message);    
+            _communicator.sendMessage(message);
+            response = _communicator.readResponse();
+            System.out.println(response);
 
-                if(response.startsWith("200")){
-                    message = "DATE: <" + this.date.toString() +">";
-                    System.out.println(message);    
-                    _communicator.sendMessage(message);
-                    response = _communicator.readResponse();
-                    System.out.println(response);
+            message = "DATE: <" + this.date.toString() +">";
+            System.out.println(message);    
+            _communicator.sendMessage(message);
+            response = _communicator.readResponse();
+            System.out.println(response);
 
-                    if(response.startsWith("200")){
-                        message = "GET";
-                        System.out.println(message);     
-                        _communicator.sendMessage(message);
-                        response = _communicator.readResponse();
-                        System.out.println(response);
+            message = "GET";
+            System.out.println(message);     
+            _communicator.sendMessage(message);
+            response = _communicator.readResponse();
+            System.out.println(response);
 
-                        if (response.startsWith("200")){
-                            String json = response.substring(4, response.indexOf("}")+1);
-                            Email email = gson.fromJson(json, Email.class);
-                            System.out.println(email.toString());
-                        }
+            String json = response.substring(4, response.indexOf("]")+1);
+            emails = gson.fromJson(json, Email[].class);
+            System.out.println(emails.toString());
 
-                        message = "QUIT";                    
-                        System.out.println(message);
-                        
-                        _communicator.sendMessage(message);
-                        String temp = _communicator.readResponse();    
-                        System.out.println(temp);
-                    
-                        isValid = response;
-                    }
-                }
-            }
+            message = "QUIT";                    
+            System.out.println(message);
+
+            _communicator.sendMessage(message);
+            String temp = _communicator.readResponse();    
+            System.out.println(temp);
+
+            return emails;
         }
         catch(JsonSyntaxException e){
             System.err.println(e.toString());
@@ -89,14 +80,7 @@ public class GetEmail{
             _communicator.sendMessage(message);
             String response = _communicator.readResponse();
         }
-
-        String message = "QUIT";                    
-        System.out.println(message);
-
-        _communicator.sendMessage(message);
-        String temp = _communicator.readResponse();
-        System.out.println(temp);
         
-        return isValid;
+        return emails;
     }
 }

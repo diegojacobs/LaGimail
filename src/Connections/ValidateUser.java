@@ -41,48 +41,34 @@ public class ValidateUser{
         String response = _communicator.readResponse();
         System.out.println(response);
         
-        if(response.startsWith("200")){
-            message = "USER: <" + this.email +">";
-            System.out.println(message);        
-            
-            _communicator.sendMessage(message);
-            response = _communicator.readResponse();
-            System.out.println(response);
-            
-            if(response.startsWith("200")){
-                message = "PASSWORD: <" + this.password +">"; 
-                System.out.println(message);
-                
-                _communicator.sendMessage(message);
-                response = _communicator.readResponse();
-                System.out.println(response);
-                
-                if(response.startsWith("200")){
-                    message = "VALIDATE";
-                    System.out.println(message);
-                    
-                    _communicator.sendMessage(message);
-                    response = _communicator.readResponse();
-                    System.out.println(response);
-                    
-                    message = "QUIT";
-                    System.out.println(message);
-                    
-                    _communicator.sendMessage(message);
-                    String temp = _communicator.readResponse();
-        
-                    return response;
-                }
-            }
-        }
-        
-        isValid = "400 Missing Connection";
-        
-        message = "QUIT";
+
+        message = "USER: <" + this.email +">";
+        System.out.println(message);        
+
         _communicator.sendMessage(message);
         response = _communicator.readResponse();
         System.out.println(response);
 
-        return isValid;
+        message = "PASSWORD: <" + this.password +">"; 
+        System.out.println(message);
+
+        _communicator.sendMessage(message);
+        response = _communicator.readResponse();
+        System.out.println(response);
+
+        message = "VALIDATE";
+        System.out.println(message);
+
+        _communicator.sendMessage(message);
+        response = _communicator.readResponse();
+        System.out.println(response);
+
+        message = "QUIT";
+        System.out.println(message);
+
+        _communicator.sendMessage(message);
+        String temp = _communicator.readResponse();
+
+        return response;
     }
 }
