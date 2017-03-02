@@ -34,6 +34,8 @@ public class ValidateUser{
         String isValid = "500";
         _communicator.initiateCommunication();
         
+        System.out.println("SOCKET INITIATE");
+        
         String message = "HELO";
         System.out.println(message);      
         

@@ -27,10 +27,10 @@ public class Communicator {
 
     public Communicator(String type) {
         if(type.equals("SMTP"))
-            serverConnection = new ServerConnection("127.0.0.1", 2508);
+            serverConnection = new ServerConnection("172.20.0.151", 2508);
         
         if(type.equals("WEB"))
-            serverConnection = new ServerConnection("127.0.0.1", 8000);
+            serverConnection = new ServerConnection("172.20.0.151", 8000);
     }
     
     public void initiateCommunication(){
@@ -45,6 +45,7 @@ public class Communicator {
     
     public void sendMessage(String message){
         try {
+            out.writeInt(message.length());
             out.write(message.getBytes());
             out.flush();
         } catch (IOException ex) {
@@ -54,6 +55,7 @@ public class Communicator {
     
     public String readResponse(){
         try {
+            size = in.readInt();
             byte[] request_bytes = new byte[size];
             in.read(request_bytes);
             String response = new String(request_bytes);

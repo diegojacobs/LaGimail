@@ -36,6 +36,8 @@ public class SendEmail{
     public void Send() {
         _communicator.initiateCommunication();
         
+        System.out.println("SOCKET INITIATE");
+        
         String response = _communicator.readResponse();
         System.out.println(response);
         

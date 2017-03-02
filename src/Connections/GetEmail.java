@@ -35,9 +35,11 @@ public class GetEmail{
         Email[] emails = null;
         _communicator.initiateCommunication();
         
+        System.out.println("SOCKET INITIATE");
+        
         try{
             String message = "HELO";
-            System.out.println(message);  
+            System.out.println(message);
             
             _communicator.sendMessage(message);
             String response = _communicator.readResponse();
@@ -61,16 +63,17 @@ public class GetEmail{
             response = _communicator.readResponse();
             System.out.println(response);
 
-            String json = response.substring(4, response.indexOf("]")+1);
+            System.out.println(response.length());
+            String json = response.substring(4, response.indexOf("]")+1);            
             emails = gson.fromJson(json, Email[].class);
-            System.out.println(emails.toString());
+            //System.out.println(emails.toString());
 
             message = "QUIT";                    
-            System.out.println(message);
+            System.out.println("C: " + message);
 
             _communicator.sendMessage(message);
             String temp = _communicator.readResponse();    
-            System.out.println(temp);
+            System.out.println("S: " + temp);                        
 
             return emails;
         }

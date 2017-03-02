@@ -101,40 +101,44 @@ public class Email {
         String cc = new String();
         String content = new String();
         
-        String[] array = this.Data.split(":");
+        String[] array = this.Data.split("\n");
+        System.out.println("Data: \n\r" +this.Data);
+        System.out.println(array.length);
         for(int i=0; i<array.length; i++){
             String line = array[i];
-            if(line.equals("SUBJECT")){
-                subject = array[i+1];
-                i++;
-                break;
+            System.out.println(line);
+            if(line.startsWith("SUBJECT")){
+                subject = array[i];
+            }            
+            else if(line.startsWith("FROM")){
+                from = array[i];
+            }            
+            else if(line.startsWith("TO")){
+                to = array[i];
+            }            
+            else if(line.startsWith("CC")){
+                cc = array[i];
             }
-            
-            if(line.equals("FROM")){
-                subject = array[i+1];
-                i++;
-                break;
-            }
-            
-            if(line.equals("TO")){
-                subject = array[i+1];
-                i++;
-                break;
-            }
-            
-            if(line.equals("CC")){
-                subject = array[i+1];
-                i++;
-                break;
-            }
-            
-            content += array[i];
+            else 
+                content = array[i];
         }
         
-        text = "From: " + from + "\n";
-        text += "To: " + to + "\n";
-        text += "Cc: " + cc + "\n";
-        text += "Subject: " + subject + "\n";
+        if (from.isEmpty())
+            text = "FROM: " + this.From + "\n";
+        else
+            text = from + "\n";
+        if (to.isEmpty())
+            text += "TO: " + this.To + "\n";
+        else
+            text += to + "\n";
+        if (cc.isEmpty())
+            text += "CC: \n";
+        else
+            text += cc + "\n";
+        if (subject.isEmpty())
+            text += "SUBJECT: \n";
+        else
+            text += subject + "\n";
         text += "\nContent: \n";
         text += content;
         

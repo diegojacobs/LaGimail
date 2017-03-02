@@ -47,6 +47,11 @@ public class NewEmailUI extends javax.swing.JFrame {
         sendButton = new javax.swing.JButton();
         discardButton = new javax.swing.JButton();
         subjectTextField = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,36 +85,66 @@ public class NewEmailUI extends javax.swing.JFrame {
 
         subjectTextField.setToolTipText("Subject");
 
+        jLabel1.setText("From:");
+
+        jLabel2.setText("To:");
+
+        jLabel3.setText("CC:");
+
+        jLabel4.setText("BCC:");
+
+        jLabel5.setText("Subject:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(fromTextField)
-            .addComponent(toTextField)
-            .addComponent(ccTextField)
-            .addComponent(bccTextField)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(discardButton)
                 .addGap(18, 18, 18)
                 .addComponent(sendButton))
             .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(subjectTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addComponent(jScrollPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(toTextField, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(ccTextField, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(bccTextField)
+                    .addComponent(fromTextField)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(fromTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fromTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(toTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(toTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ccTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ccTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bccTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bccTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(subjectTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(subjectTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
                 .addGap(4, 4, 4)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
@@ -123,9 +158,9 @@ public class NewEmailUI extends javax.swing.JFrame {
 
     private void discardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discardButtonActionPerformed
         // TODO add your handling code here:
-        inboxUI = new InboxUI(this.user, false);
+        //inboxUI = new InboxUI(this.user, false);
         this.dispose();
-        inboxUI.setVisible(true);
+        //inboxUI.setVisible(true);
     }//GEN-LAST:event_discardButtonActionPerformed
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
@@ -138,33 +173,36 @@ public class NewEmailUI extends javax.swing.JFrame {
         String content = contentTextArea.getText();
         
         String data = new String();
-        data += "SUBJECT: <" + subject + ">\n";
-        data += "FROM: <" + from + ">\n";
+        data += "SUBJECT: " + subject + "\n";
+        data += "FROM: " + from + "\n";
         
         ArrayList<String> to = new ArrayList<String>();
         
         if(!labelTo.isEmpty()){
             String[] emailsTo = labelTo.split(";");
             for(String email : emailsTo){
-                to.add(email);
-                data += "TO: <" + email + ">\n";
+                if(!to.contains(email))
+                    to.add(email);                
             }
+            data += "TO: " + labelTo + "\n";
         }
         
         if(!labelCc.isEmpty()){
             String[] emailsCc = labelCc.split(";");
             for(String email : emailsCc){
-                to.add(email);
-                data += "CC: <" + email + ">\n";
+                if(!to.contains(email))
+                    to.add(email);
             }
+            data += "CC: " + labelCc + "\n";
         }
         
         if(!labelBcc.isEmpty()){
             String[] emailsBcc = labelBcc.split(";");
             for(String email : emailsBcc){
-                to.add(email);
-                data += "BCC: <" + email + ">\n";
+                if(!to.contains(email))
+                    to.add(email);
             }
+            data += "BCC: " + labelBcc + "\n";
         }
         
         data += content + "\n";
@@ -183,6 +221,11 @@ public class NewEmailUI extends javax.swing.JFrame {
     private javax.swing.JTextArea contentTextArea;
     private javax.swing.JButton discardButton;
     private javax.swing.JTextField fromTextField;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton sendButton;
     private javax.swing.JTextField subjectTextField;
