@@ -92,9 +92,57 @@ public class Email {
     public void setDate(Date Date) {
         this.Date = Date;
     }
+    
+    public String getParsedData(){
+        String text = new String();
+        String subject = new String();
+        String from = new String();
+        String to = new String();
+        String cc = new String();
+        String content = new String();
+        
+        String[] array = this.Data.split(":");
+        for(int i=0; i<array.length; i++){
+            String line = array[i];
+            if(line.equals("SUBJECT")){
+                subject = array[i+1];
+                i++;
+                break;
+            }
+            
+            if(line.equals("FROM")){
+                subject = array[i+1];
+                i++;
+                break;
+            }
+            
+            if(line.equals("TO")){
+                subject = array[i+1];
+                i++;
+                break;
+            }
+            
+            if(line.equals("CC")){
+                subject = array[i+1];
+                i++;
+                break;
+            }
+            
+            content += array[i];
+        }
+        
+        text = "From: " + from + "\n";
+        text += "To: " + to + "\n";
+        text += "Cc: " + cc + "\n";
+        text += "Subject: " + subject + "\n";
+        text += "\nContent: \n";
+        text += content;
+        
+        return text;
+    }
 
     @Override
     public String toString() {
-        return "Email{" + "EmailId=" + EmailId + ", From=" + From + ", To=" + To + ", Data=" + Data + ", Date=" + Date + '}';
+        return "From: " + this.From + " " + this.Date.toString();
     }
 }

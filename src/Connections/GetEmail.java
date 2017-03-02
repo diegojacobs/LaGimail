@@ -11,7 +11,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import java.util.ArrayList;
 
 /**
  *
@@ -32,8 +31,8 @@ public class GetEmail{
         gson = new Gson();
     }
     
-    public String Get(){
-        String isValid = "";
+    public Email[] Get(){
+        Email[] emails = null;
         _communicator.initiateCommunication();
         
         try{
@@ -66,9 +65,9 @@ public class GetEmail{
                         System.out.println(response);
 
                         if (response.startsWith("200")){
-                            String json = response.substring(4, response.indexOf("}")+1);
-                            Email email = gson.fromJson(json, Email.class);
-                            System.out.println(email.toString());
+                            String json = response.substring(4, response.indexOf("]")+1);
+                            emails = gson.fromJson(json, Email[].class);
+                            System.out.println(emails.toString());
                         }
 
                         message = "QUIT";                    
@@ -78,7 +77,7 @@ public class GetEmail{
                         String temp = _communicator.readResponse();    
                         System.out.println(temp);
                     
-                        isValid = response;
+                        return emails;
                     }
                 }
             }
@@ -89,14 +88,7 @@ public class GetEmail{
             _communicator.sendMessage(message);
             String response = _communicator.readResponse();
         }
-
-        String message = "QUIT";                    
-        System.out.println(message);
-
-        _communicator.sendMessage(message);
-        String temp = _communicator.readResponse();
-        System.out.println(temp);
         
-        return isValid;
+        return emails;
     }
 }

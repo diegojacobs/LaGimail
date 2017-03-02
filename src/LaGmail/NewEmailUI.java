@@ -6,12 +6,7 @@
 package LaGmail;
 
 import Connections.SendEmail;
-import Models.Email;
-import java.awt.Color;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.ArrayList;
-import javax.swing.JTextField;
 
 /**
  *
@@ -24,6 +19,7 @@ public class NewEmailUI extends javax.swing.JFrame {
     
     /**
      * Creates new form NewEmail
+     * @param user
      */
     public NewEmailUI(String user) {
         initComponents();
@@ -143,16 +139,16 @@ public class NewEmailUI extends javax.swing.JFrame {
         String content = contentTextArea.getText();
         
         String data = new String();
-        data += "SUBJECT: <" + subject + ">\n";
-        data += "FROM: <" + from + ">\n";
+        data += "SUBJECT: <" + subject;
+        data += "FROM: <" + from;
         
-        ArrayList<String> to = new ArrayList<String>();
+        ArrayList<String> to = new ArrayList<>();
         
         if(!labelTo.isEmpty()){
             String[] emailsTo = labelTo.split(";");
             for(String email : emailsTo){
                 to.add(email);
-                data += "TO: <" + email + ">\n";
+                data += "TO: " + email ;
             }
         }
         
@@ -160,7 +156,7 @@ public class NewEmailUI extends javax.swing.JFrame {
             String[] emailsCc = labelCc.split(";");
             for(String email : emailsCc){
                 to.add(email);
-                data += "CC: <" + email + ">\n";
+                data += "CC: " + email;
             }
         }
         
@@ -168,13 +164,17 @@ public class NewEmailUI extends javax.swing.JFrame {
             String[] emailsBcc = labelBcc.split(";");
             for(String email : emailsBcc){
                 to.add(email);
-                data += "BCC: <" + email + ">\n";
+                data += "BCC: " + email;
             }
         }
         
-        data += content + "\n";
+        data += content;
         
         sendEmail.Send(to, data);
+        
+        inboxUI = new InboxUI(user, false);
+        this.dispose();
+        inboxUI.setVisible(true);
     }//GEN-LAST:event_sendButtonActionPerformed
 
 

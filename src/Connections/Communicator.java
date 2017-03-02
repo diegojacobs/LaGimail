@@ -21,7 +21,7 @@ public class Communicator {
     private ServerConnection serverConnection;
     private DataOutputStream out;
     private DataInputStream in;
-    private int size = 256;
+    private int size = 512;
     BufferedReader _in;
     PrintWriter _out;
 
