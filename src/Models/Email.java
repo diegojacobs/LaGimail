@@ -103,10 +103,10 @@ public class Email {
         
         String[] array = this.Data.split("\n");
         System.out.println("Data: \n\r" +this.Data);
-        System.out.println(array.length);
+        /*System.out.println(array.length);*/
         for(int i=0; i<array.length; i++){
             String line = array[i];
-            System.out.println(line);
+            //System.out.println(line);
             if(line.startsWith("SUBJECT")){
                 subject = array[i];
             }            

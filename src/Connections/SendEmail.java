@@ -75,8 +75,8 @@ public class SendEmail{
         _communicator.sendMessage(message);
         System.out.println(message);
         
-        response = _communicator.readResponse();
-        System.out.println(response);
+        /*response = _communicator.readResponse();
+        System.out.println(response);*/
         
         message = ".";
         _communicator.sendMessage(message);
